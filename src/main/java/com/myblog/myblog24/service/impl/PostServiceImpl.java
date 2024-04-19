@@ -1,6 +1,7 @@
 package com.myblog.myblog24.service.impl;
 
 import com.myblog.myblog24.entity.Post;
+import com.myblog.myblog24.exception.ResourceNotFoundException;
 import com.myblog.myblog24.payload.PostDto;
 import com.myblog.myblog24.repository.PostRepository;
 import com.myblog.myblog24.service.PostService;
@@ -27,6 +28,20 @@ public class PostServiceImpl implements PostService {
         dto.setTitle(savedPost.getTitle());
         dto.setDescription(savedPost.getDescription());
         dto.setContent(savedPost.getContent());
+        return dto;
+    }
+
+    @Override
+    public PostDto getPostById(long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                ()->new ResourceNotFoundException("Post not fund with id:"+id)
+        );
+
+        PostDto dto = new PostDto();
+        dto.setId(post.getId());
+        dto.setTitle(post.getTitle());
+        dto.setDescription(post.getDescription());
+        dto.setContent(post.getContent());
         return dto;
     }
 }
